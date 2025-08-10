@@ -1,0 +1,202 @@
+main {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: #333;
+}
+
+.section-title {
+    margin-bottom: 20px;
+}
+
+section {
+    margin-bottom: 50px;
+}
+
+.plugin-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.plugin-card {
+    position: relative;
+    background-color: #1f2937;
+    border-radius: 10px;
+    padding: 20px;
+    transition: transform 0.2s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
+}
+
+.plugin-icon {
+    width: 64px;
+    /* size of icon */
+    height: 64px;
+    position: absolute;
+    /* position inside plugin-card */
+    top: 20px;
+    /* distance from top */
+    left: 20px;
+    /* distance from left */
+    border-radius: 8px;
+    object-fit: cover;
+    /* scale image properly */
+}
+
+.plugin-card:hover {
+    transform: scale(1.03);
+    cursor: pointer;
+}
+
+.plugin-card h2 {
+    margin-top: 80px;
+    /* or any value you prefer */
+    margin-bottom: 8px;
+    /* keep some spacing below the title */
+    font-size: 1.3rem;
+}
+
+.plugin-card p {
+    font-size: 0.6rem;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.plugin-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.learn-more {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.plugin-card a.learn-more:hover {
+    text-decoration: underline;
+}
+
+
+.tags-container {
+    margin-bottom: 8px;
+}
+
+.tag {
+    display: inline-block;
+    background-color: #2563eb;
+    color: white;
+    padding: 2px 8px;
+    margin-right: 6px;
+    font-size: 0.75rem;
+    border-radius: 12px;
+    font-weight: 600;
+    user-select: none;
+}
+
+.badge {
+    color: #fbbf24;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(135deg,
+            rgba(15, 23, 42, 0.8),
+            rgba(30, 41, 59, 0.6));
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    border-radius: 15px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+}
+
+.badge i {
+    color: #fbbf24;
+}
+
+
+.plugin-card.premium {
+    position: relative;
+    border: 2px solid #4fc3f7;
+    background: linear-gradient(135deg,
+            #bbdefb 0%,
+            #90caf9 25%,
+            #64b5f6 50%,
+            #42a5f5 75%,
+            #2196f3 100%);
+    box-shadow:
+        0 0 12px 3px rgba(33, 150, 243, 0.8),
+        inset 0 0 30px 5px #bbdefb;
+    padding: 20px;
+    color: #0d47a1;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 1;
+}
+
+.plugin-card.premium:hover {
+    animation: pulseGlow 2.5s infinite ease-in-out;
+    cursor: pointer;
+    transform: scale(1.05);
+    /* scale on hover */
+}
+
+.plugin-card.premium:not(:hover) {
+    /* smooth scale back on unhover */
+    transform: scale(1);
+    animation: none;
+}
+
+@keyframes pulseGlow {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 12px 3px rgba(33, 150, 243, 0.8),
+            inset 0 0 30px 5px #bbdefb;
+    }
+
+    50% {
+        box-shadow:
+            0 0 20px 6px rgba(33, 150, 243, 1),
+            inset 0 0 40px 8px #bbdefb;
+    }
+}
+
+.diamond-icon {
+    color: #fdd835;
+    /* yellow gold */
+    margin-left: 6px;
+    vertical-align: middle;
+    text-shadow:
+        0 0 3px #fff,
+        0 0 5px #fbc02d;
+    font-size: 1.1em;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #94a3b8;
+    background-color: #1e293b;
+    margin-top: 40px;
+}
+
+@media (max-width: 1024px) {
+    .plugin-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .plugin-list {
+        grid-template-columns: 1fr;
+    }
+}

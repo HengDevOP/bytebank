@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles/style.css" />
+    <link rel="stylesheet" href="/styles/home.css" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="logo_container">
+          <img src="/logo.png" alt="Logo" />
+          <h1>BYTEBANK.BOATS</h1>
+        </div>
+        <div class="logo_container">
+          <ul>
+            <li><a href="/plugins">Plugins</a></li>
+            <li><a href="/features">Features</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/faq">Terms Conditions</a></li>
+            <li><a href="/premium">Premium</a></li>
+          </ul>
+        </div>
+        <div class="logo_container">
+          <% if (user) { %>
+          <div class="user-info" id="userInfo">
+            <img src="<%= user.avatar %>" alt="User Avatar" />
+            <span><%= user.username %></span>
+          </div>
+
+          <div id="dashboardMenu" class="dashboard-menu hidden">
+            <ul id="a-dashboard">
+              <li><a id="a-dashboard-" href="/dashboard">Dashboard</a></li>
+              <li><a id="a-dashboard-" href="/logout">Logout</a></li>
+            </ul>
+          </div>
+          <% } else { %>
+          <button onclick="window.location.href='/login'">
+            Login with Discord
+          </button>
+          <% } %>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <%- body %>
+      <!-- Rendered page content will go here -->
+    </main>
+
+    <footer>
+      &copy; <%= new Date().getFullYear() %> ByteBank. All rights reserved.
+    </footer>
+  </body>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const userInfo = document.getElementById("userInfo");
+      const dashboardMenu = document.getElementById("dashboardMenu");
+
+      userInfo.addEventListener("click", () => {
+        dashboardMenu.classList.toggle("hidden");
+      });
+
+      // Close menu if clicking outside
+      document.addEventListener("click", (event) => {
+        if (
+          !userInfo.contains(event.target) &&
+          !dashboardMenu.contains(event.target)
+        ) {
+          dashboardMenu.classList.add("hidden");
+        }
+      });
+    });
+  </script>
+</html>

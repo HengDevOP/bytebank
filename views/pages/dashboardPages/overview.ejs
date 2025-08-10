@@ -1,0 +1,358 @@
+<!-- views/pages/dashboardPages/overview.ejs -->
+<div class="dashboard-overview">
+  <section id="all-plugins">
+    <h1 class="section-title">Installed Plugins</h1>
+    <div class="plugin-list" id="all-list"></div>
+  </section>
+</div>
+
+<style>
+  .section-title {
+    margin-bottom: 20px;
+  }
+
+  section {
+    margin-bottom: 100px;
+  }
+
+  .plugin-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .plugin-card {
+    opacity: 0.5;
+    position: relative;
+    background-color: #1f2937;
+    border-radius: 10px;
+    padding: 20px;
+    transition: transform 0.2s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 220px;
+  }
+
+  .plugin-card.installed {
+    opacity: 1; /* normal */
+  }
+
+  .plugin-icon {
+    width: 64px;
+    /* size of icon */
+    height: 64px;
+    position: absolute;
+    /* position inside plugin-card */
+    top: 20px;
+    /* distance from top */
+    left: 20px;
+    /* distance from left */
+    border-radius: 8px;
+    object-fit: cover;
+    /* scale image properly */
+  }
+
+  .plugin-card:hover {
+    transform: scale(1.03);
+    cursor: pointer;
+  }
+
+  .plugin-card h2 {
+    margin-top: 80px;
+    /* or any value you prefer */
+    margin-bottom: 8px;
+    /* keep some spacing below the title */
+    font-size: 1.3rem;
+  }
+
+  .plugin-card p {
+    font-size: 0.6rem;
+    margin-bottom: 20px;
+    flex-grow: 1;
+  }
+
+  .plugin-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+  }
+
+  .learn-more {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+
+  .plugin-card a.learn-more:hover {
+    text-decoration: underline;
+  }
+
+  .tags-container {
+    margin-bottom: 8px;
+  }
+
+  .tag {
+    display: inline-block;
+    background-color: #2563eb;
+    color: white;
+    padding: 2px 8px;
+    margin-right: 6px;
+    font-size: 0.75rem;
+    border-radius: 12px;
+    font-weight: 600;
+    user-select: none;
+  }
+
+  .badge {
+    color: #fbbf24;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(
+      135deg,
+      rgba(15, 23, 42, 0.8),
+      rgba(30, 41, 59, 0.6)
+    );
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    border-radius: 15px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+  }
+
+  .badge i {
+    color: #fbbf24;
+  }
+
+  .install-btn {
+    padding: 6px 12px;
+    border: none;
+    background-color: #00bd2f;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+
+  .plugin-card.premium {
+    position: relative;
+    border: 2px solid #4fc3f7;
+    background: linear-gradient(
+      135deg,
+      #bbdefb 0%,
+      #90caf9 25%,
+      #64b5f6 50%,
+      #42a5f5 75%,
+      #2196f3 100%
+    );
+    box-shadow: 0 0 12px 3px rgba(33, 150, 243, 0.8), inset 0 0 30px 5px #bbdefb;
+    padding: 20px;
+    color: #0d47a1;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 1;
+  }
+
+  .plugin-card.premium:hover {
+    animation: pulseGlow 2.5s infinite ease-in-out;
+    cursor: pointer;
+    transform: scale(1.05);
+    /* scale on hover */
+  }
+
+  .plugin-card.premium:not(:hover) {
+    /* smooth scale back on unhover */
+    transform: scale(1);
+    animation: none;
+  }
+
+  @keyframes pulseGlow {
+    0%,
+    100% {
+      box-shadow: 0 0 12px 3px rgba(33, 150, 243, 0.8),
+        inset 0 0 30px 5px #bbdefb;
+    }
+
+    50% {
+      box-shadow: 0 0 20px 6px rgba(33, 150, 243, 1), inset 0 0 40px 8px #bbdefb;
+    }
+  }
+
+  .diamond-icon {
+    color: #fdd835;
+    /* yellow gold */
+    margin-left: 6px;
+    vertical-align: middle;
+    text-shadow: 0 0 3px #fff, 0 0 5px #fbc02d;
+    font-size: 1.1em;
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    color: #94a3b8;
+    background-color: #1e293b;
+    margin-top: 40px;
+  }
+
+  @media (max-width: 1024px) {
+    .plugin-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .plugin-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<!-- Your styles here -->
+
+<script>
+  async function fetchPlugins() {
+    try {
+      // Fetch plugins and guild profile in parallel
+      const [resPlugins, resGuildPlugins] = await Promise.all([
+        fetch("/api/plugins"),
+        fetch(`/api/guild-profile?guildId=<%= encodeURIComponent(guildId) %>`),
+      ]);
+
+      if (!resPlugins.ok) throw new Error(`Plugins HTTP ${resPlugins.status}`);
+      if (!resGuildPlugins.ok)
+        throw new Error(`Guild plugins HTTP ${resGuildPlugins.status}`);
+
+      const plugins = await resPlugins.json();
+      const guildPlugins = await resGuildPlugins.json(); // array of { pluginId, enabled }
+
+      // Create a Set of enabled pluginIds for fast lookup
+      const installedPluginIds = new Set(
+        guildPlugins.filter((p) => p.enabled).map((p) => p.pluginId)
+      );
+
+      // Mark plugins as installed if plugin.id is in installedPluginIds
+      plugins.forEach((plugin) => {
+        plugin.installed = installedPluginIds.has(plugin.id);
+      });
+
+      // Sort: installed plugins first
+      plugins.sort((a, b) => {
+        if (a.installed === b.installed) return 0;
+        return a.installed ? -1 : 1;
+      });
+
+      renderPluginSections(plugins);
+    } catch (err) {
+      console.error("Error fetching plugins:", err);
+      document.getElementById(
+        "all-list"
+      ).innerHTML = `<p style="color:red;">Failed to load plugins.</p>`;
+    }
+  }
+
+  function createPluginCard(plugin) {
+    const tagsHtml = (plugin.tags || [])
+      .slice(0, 3)
+      .map((tag) => `<span class="tag">${tag}</span>`)
+      .join(" ");
+
+    const diamondIcon = plugin.premium
+      ? ` <i class="fa-solid fa-gem diamond-icon" title="Premium"></i>`
+      : "";
+
+    const installBtnText = plugin.installed ? "Installed" : "Install";
+    const installBtnDisabled = plugin.installed ? "disabled" : "";
+
+    return `
+    <div class="plugin-card ${plugin.premium ? "premium" : ""} ${
+      plugin.installed ? "installed" : ""
+    }">
+      <img src="${plugin.image}" alt="${
+      plugin.name
+    } icon" class="plugin-icon" />
+      <div class="badge">
+        <i class="fa-solid fa-download"></i> ${formatDownloads(
+          plugin.downloadCount || 0
+        )}
+        &nbsp;&nbsp;${plugin.rating || 0} <i class="fa-solid fa-star"></i>
+      </div>
+      <h2>${plugin.name}${diamondIcon}</h2>
+      <div class="tags-container">${tagsHtml}</div>
+      <p>${plugin.description || ""}</p>
+      <div class="plugin-actions">
+        <a href="/plugins/${plugin.id}" class="learn-more">Learn More ></a>
+        <button class="install-btn" ${installBtnDisabled} onclick="installPlugin(this, '${
+      plugin.id
+    }', '<%= guildId %>')">${installBtnText}</button>
+      </div>
+    </div>
+  `;
+  }
+
+  function renderPluginSections(pluginData) {
+    const allPlugins = [...pluginData];
+    document.getElementById("all-list").innerHTML = allPlugins
+      .map(createPluginCard)
+      .join("");
+  }
+
+  function formatDownloads(num) {
+    if (num >= 1_000_000) {
+      return (num / 1_000_000).toFixed(num % 1_000_000 === 0 ? 0 : 1) + "M";
+    } else if (num >= 1_000) {
+      return (num / 1_000).toFixed(num % 1_000 === 0 ? 0 : 1) + "K";
+    } else {
+      return num.toString();
+    }
+  }
+
+  function installPlugin(button, pluginId, guildId) {
+    button.disabled = true;
+    const originalText = button.textContent;
+    button.textContent = "Installing...";
+
+    fetch("/install-plugin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: pluginId, guildId }),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Network response was not ok");
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Plugin installed:", data);
+        button.textContent = "Installed";
+        // Optionally update your local state if needed
+        button.disabled = true;
+
+        // Reload the page to see the update
+        location.reload();
+      })
+      .catch((error) => {
+        console.error("Error installing plugin:", error);
+        alert("Failed to install plugin.");
+        button.textContent = originalText;
+        button.disabled = false;
+      });
+  }
+
+  fetchPlugins();
+</script>

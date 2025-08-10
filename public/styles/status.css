@@ -1,0 +1,50 @@
+main {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.status-card {
+    background-color: #2f3136;
+    border-radius: 8px;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.status-info h2 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.status-info p {
+    margin: 5px 0 0;
+    color: #b9bbbe;
+}
+
+.status-indicator {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+}
+
+.green {
+    background-color: #43b581;
+}
+
+.yellow {
+    background-color: #faa61a;
+}
+
+.red {
+    background-color: #f04747;
+}
+
+footer {
+    text-align: center;
+    padding: 15px;
+    color: #b9bbbe;
+    font-size: 0.85rem;
+}
